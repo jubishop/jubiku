@@ -7,12 +7,28 @@
     <script src="jubiku.js"></script>
 
     <script type="text/javascript">
-        jubiku = new Jubiku();
+        window.onload = function() {
+            var request = new XMLHttpRequest();
+            request.responseType = "json";
+            request.addEventListener("load", function() {
+                jubiku = new Jubiku(
+                    document.getElementById("jubiku"),
+                    this.response.squares,
+                    this.response.rowHints,
+                    this.response.columnHints,
+                    this.response.internalNumbers
+                );
+            });
+            request.open("GET", "test1.json");
+            request.send();
+
+        }
     </script>
 </head>
 
 <body>
     Hello World
+    <div id="jubiku"></div>
 </body>
 
 </html>
