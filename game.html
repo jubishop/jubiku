@@ -12,7 +12,7 @@
             request.responseType = "json";
             request.addEventListener("load", function() {
                 jubiku = new Jubiku(
-                    document.getElementById("jubiku"),
+                    document.getElementById("jubikuCanvas"),
                     this.response.squares,
                     this.response.rowHints,
                     this.response.columnHints,
@@ -21,14 +21,13 @@
             });
             request.open("GET", "test1.json");
             request.send();
-
         }
     </script>
 </head>
 
 <body>
     Hello World
-    <div id="jubiku"></div>
+    <canvas id="jubikuCanvas" width="800" height="800"></canvas>
 </body>
 
 </html>
