@@ -9,9 +9,9 @@ class Jubiku {
         var pen = canvas.getContext('2d');
         pen.fillStyle = 'green';
 
-        this.jubiSquares = squares.map(function(rowElement, row, _array) {
-            return rowElement.map(function(columnValue, column, _array) {
-                return new JubiSquare(pen, columnValue, row, column)
+        this.jubiSquares = squares.map(function(rowElement, row) {
+            return rowElement.map(function(columnValue, column) {
+                return new JubiSquare(pen, columnValue, row, column);
             });
         });
         console.log(this.jubiSquares);
