@@ -1,6 +1,6 @@
 require './router.rb'
 
 use Rack::Static,
-  :urls => ["/gameJSON"],
-  :root => "public"
+  :urls => ['/json', '/js'],
+  :root => 'public'
 run JubikuRouter
