@@ -9,7 +9,7 @@ class JubikuRouter
       renderer = ERB.new(File.read('game.erb'))
       response.write renderer.result()
     else
-      response.write 'Path Not Found'
+      response.write 'URL unsupported'
       response.status = 404
     end
 
