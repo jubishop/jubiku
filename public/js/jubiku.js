@@ -1,5 +1,5 @@
 'use strict'
-
+// comment
 class JubiSquare {
   constructor(pen, shouldExist, row, column) {
     pen.fillRect(110 * row , 110 * column, 100, 100);

@@ -1,4 +1,4 @@
-require_relative 'jubirack'
+require 'execjs'
 require 'rack/utils'
 require 'uri'
 
@@ -66,11 +66,25 @@ module JubiRack
             return Rack::Response.new('', 304).finish
           end
 
-          puts "working on getting the file"
-          response = Rack::Response.new
-          response.write 'Working on it'
-          response.status = 200
-          response.finish
+          gem_spec = Gem::Specification.find_by_name('babel-source')
+          script_path = File.join(
+            gem_spec.full_require_paths.first,
+            'babel.js'
+          )
+
+          puts file_path
+          js_code = ExecJS.compile("var self = this; " + File.read(script_path))
+          babel_code = js_code.call(
+            'babel.transform',
+            File.read(file_path),
+            {'ast' => false}
+          )['code']
+          
+          puts babel_code
+          response = Rack::Response.new(babel_code)
+          result = response.finish
+          puts result
+          result
         else
           return Rack::Response.new("#{request.path} not found", 404).finish
         end
@@ -83,7 +97,7 @@ module JubiRack
   class Static < Rack::Static
     def call(env)
       response = super(env)
-      # puts response
+      puts response
       response
     end
   end

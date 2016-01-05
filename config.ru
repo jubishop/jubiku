@@ -2,7 +2,7 @@ require_relative 'router'
 require_relative 'jubirack/babel'
 
 use JubiRack::Static,
-  :urls => ['/json/'],
+  :urls => ['/js/', '/json/'],
   :root => 'public'
 use JubiRack::Babel,
   :urls => ['/js/'],
