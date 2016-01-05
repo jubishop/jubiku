@@ -6,5 +6,6 @@ use Rack::Static,
   :root => 'public'
 use JubiRack::Babel,
   :urls => ['/js/'],
-  :root => 'public' 
+  :root => 'public',
+  :options => { 'presets' => ['es2015'] }
 run JubikuRouter

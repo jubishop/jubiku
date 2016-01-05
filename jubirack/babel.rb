@@ -12,11 +12,11 @@ module JubiRack
   MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'
 
   class Babel
-
-    def initialize(app, options={})
+    def initialize(app, options = {})
       @app = app
       @root = options[:root]
       @urls = options[:urls]
+      @options = options[:options] || {}
 
       if (@root.nil? || @urls.nil?)
         raise ArgumentError,
@@ -24,6 +24,9 @@ module JubiRack
       end
 
       @urls = [@urls] if @urls.kind_of? String
+
+      babel_path = File.expand_path("../babel.js", __FILE__)
+      @compiled_babel_js = ExecJS.compile(File.read(babel_path))
     end
 
     def shouldServe? path
@@ -70,20 +73,13 @@ module JubiRack
             return Rack::Response.new('', 304).finish
           end
 
-          gem_spec = Gem::Specification.find_by_name('babel-source')
-          script_path = File.join(
-            gem_spec.full_require_paths.first,
-            'babel.js'
-          )
-
-          js_code = ExecJS.compile("var self = this; " + File.read(script_path))
-          babel_code = js_code.call(
-            'babel.transform',
+          transpiled_js = @compiled_babel_js.call(
+            'Babel.transform',
             File.read(file_path),
-            {'ast' => false}
+            @options.merge({'ast' => false})
           )['code']
-          
-          return response = Rack::Response.new(babel_code, 200, {
+
+          return response = Rack::Response.new(transpiled_js, 200, {
             LAST_MODIFIED => last_modified,
             CONTENT_TYPE => CONTENT_JAVASCRIPT
           }).finish
