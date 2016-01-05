@@ -1,6 +1,10 @@
-require './router.rb'
+require_relative 'router'
+require_relative 'jubirack/babel'
 
-use Rack::Static,
-  :urls => ['/json', '/js'],
+use JubiRack::Static,
+  :urls => ['/json/'],
   :root => 'public'
+use JubiRack::Babel,
+  :urls => ['/js/'],
+  :root => 'public' 
 run JubikuRouter
