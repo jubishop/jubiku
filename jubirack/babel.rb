@@ -2,11 +2,14 @@ require 'execjs'
 require 'rack/utils'
 require 'uri'
 
+require_relative 'jubirack'
+
 module JubiRack
   ALLOW = 'Allow'
   ALLOWED_VERBS = %w[GET HEAD OPTIONS]
   ALLOW_HEADER = ALLOWED_VERBS.join(', ')
-  HTTP_IF_MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'
+  CONTENT_JAVASCRIPT = 'application/javascript'
+  MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'
 
   class Babel
 
@@ -61,8 +64,9 @@ module JubiRack
             }).finish
           end
 
+          last_modified = File.mtime(file_path).httpdate
           # TODO: Replace env[] with request.get_header
-          if env[HTTP_IF_MODIFIED_SINCE] == File.mtime(file_path).httpdate
+          if env[MODIFIED_SINCE] == last_modified
             return Rack::Response.new('', 304).finish
           end
 
@@ -72,7 +76,6 @@ module JubiRack
             'babel.js'
           )
 
-          puts file_path
           js_code = ExecJS.compile("var self = this; " + File.read(script_path))
           babel_code = js_code.call(
             'babel.transform',
@@ -80,25 +83,16 @@ module JubiRack
             {'ast' => false}
           )['code']
           
-          puts babel_code
-          response = Rack::Response.new(babel_code)
-          result = response.finish
-          puts result
-          result
+          return response = Rack::Response.new(babel_code, 200, {
+            LAST_MODIFIED => last_modified,
+            CONTENT_TYPE => CONTENT_JAVASCRIPT
+          }).finish
         else
           return Rack::Response.new("#{request.path} not found", 404).finish
         end
       else
         @app.call(env)
       end
-    end
-  end
-
-  class Static < Rack::Static
-    def call(env)
-      response = super(env)
-      puts response
-      response
     end
   end
 end
