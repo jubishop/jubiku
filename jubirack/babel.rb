@@ -79,6 +79,8 @@ module JubiRack
             @options.merge({'ast' => false})
           )['code']
 
+          #TODO: Optimize by writing cached transpiled_js to file
+
           return response = Rack::Response.new(transpiled_js, 200, {
             LAST_MODIFIED => last_modified,
             CONTENT_TYPE => CONTENT_JAVASCRIPT

@@ -1,8 +1,17 @@
 'use strict'
 
 class JubiSquare {
+  static get SQUARE_SIZE() { return 100; }
+  static get GUTTER_SIZE() { return 10; }
+
   constructor(pen, shouldExist, row, column) {
-    pen.fillRect(110 * row , 110 * column, 100, 100);
+    var spacing = JubiSquare.SQUARE_SIZE + JubiSquare.GUTTER_SIZE
+    pen.fillRect(
+      spacing * row ,
+      spacing * column,
+      JubiSquare.SQUARE_SIZE,
+      JubiSquare.SQUARE_SIZE
+    )
   }
 }
 
@@ -16,6 +25,16 @@ class Jubiku {
         return new JubiSquare(pen, columnValue, row, column);
       });
     });
-    console.log(this.jubiSquares);
+
+    canvas.addEventListener('mouseenter', this.mouseEnter);
+    canvas.addEventListener('mouseleave', this.mouseLeave);
+  }
+
+  mouseEnter() {
+    console.log('mouse entered');
+  }
+
+  mouseLeave() {
+    console.log('mouse left');
   }
 }
