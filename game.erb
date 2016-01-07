@@ -4,22 +4,25 @@
 <head>
     <meta charset="utf-8" />
     <title>Jubiku</title>
-    <script src="js/jubiku.js"></script>
 
-    <script type="text/javascript">
+    <!-- TODO: Configure JS dependency tree -->
+    <script src='js/jubisquare.js'></script>
+    <script src='js/jubiku.js'></script>
+
+    <script type='text/javascript'>
         window.onload = function() {
             var request = new XMLHttpRequest();
-            request.responseType = "json";
-            request.addEventListener("load", function() {
+            request.responseType = 'json';
+            request.addEventListener('load', function() {
                 jubiku = new Jubiku(
-                    document.getElementById("jubikuCanvas"),
+                    document.getElementById('jubikuCanvas'),
                     this.response.squares,
                     this.response.rowHints,
                     this.response.columnHints,
                     this.response.internalNumbers
                 );
             });
-            request.open("GET", "json/test1.json");
+            request.open('GET', 'json/test1.json');
             request.send();
         }
     </script>
@@ -27,7 +30,7 @@
 
 <body>
     Hello World
-    <canvas id="jubikuCanvas" width="800" height="800"></canvas>
+    <canvas id='jubikuCanvas' width='800' height='800'></canvas>
 </body>
 
 </html>
