@@ -1,5 +1,5 @@
-require_relative 'router'
 require_relative 'jubirack/babel'
+require_relative 'jubiku_router'
 
 use Rack::Static,
   :urls => ['/css/', '/json/'],

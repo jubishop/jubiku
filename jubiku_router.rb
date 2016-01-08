@@ -1,5 +1,3 @@
-require 'erb'
-
 class JubikuRouter
   def self.call(env)
     request = Rack::Request.new env
