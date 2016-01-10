@@ -16,10 +16,10 @@ class JubiSquare {
 
   clearSquare() {
     this.pen.clearRect(
-      this.topEdge,
-      this.leftEdge,
-      JubiSquare.SQUARE_SIZE,
-      JubiSquare.SQUARE_SIZE      
+      this.topEdge - (JubiSquare.GUTTER_SIZE / 2),
+      this.leftEdge - (JubiSquare.GUTTER_SIZE / 2),
+      JubiSquare.SQUARE_SIZE + JubiSquare.GUTTER_SIZE,
+      JubiSquare.SQUARE_SIZE + JubiSquare.GUTTER_SIZE   
     );
   }
 
