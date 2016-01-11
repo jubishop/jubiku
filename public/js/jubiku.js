@@ -47,6 +47,10 @@ class Jubiku {
     var mouse_x = event.clientX - bounding_rect.left;
     var mouse_y = event.clientY - bounding_rect.top;
 
+    if (mouse_x < 0 || mouse_y < 0) {
+      return false; // over left or top of board
+    }
+
     var square_plus_gutter = JubiSquare.ROLLED_OFF_SIZE +
        JubiSquare.GUTTER_SIZE;
     var column = Math.floor(mouse_x / square_plus_gutter);
@@ -54,7 +58,7 @@ class Jubiku {
 
     if (column >= this.jubiSquares.length ||
       row >= this.jubiSquares[0].length) {
-      return false; // beyond range of board
+      return false; // over right or bottom of board
     }
 
     return (mouse_x % square_plus_gutter > JubiSquare.ROLLED_OFF_SIZE ||
