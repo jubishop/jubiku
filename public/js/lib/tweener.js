@@ -1,5 +1,31 @@
 class Tweener {
-  constructor() {}
+  constructor(startValue, amountPerMS, callback) {
+    this.currentValue = startValue;
+    this.amountPerMS = amountPerMS;
+    this.callback = callback;
+  }
+
+  _frame(timeStamp) {
+    var time_diff = timeStamp - this.currentMS;
+    this.currentValue = (this.toValue > this.currentValue) ?
+      Math.min(
+        this.toValue,
+        time_diff * this.amountPerMS + this.currentValue
+      ) :
+      Math.max(
+        this.toValue,
+        this.currentValue - time_diff * this.amountPerMS 
+      );
+
+    if (this.currentValue == this.toValue) {
+      this.stopTweening();
+    } else {
+      this.currentMS = timeStamp;
+      this.animationID = window.requestAnimationFrame(this._frame.bind(this));
+    }
+
+    this.callback(this.currentValue);
+  }
 
   stopTweening() {
     if (this.animationID) {
@@ -7,36 +33,12 @@ class Tweener {
       this.animationID = false;
     }
   }
-  
-  tweenInTime(fromValue, toValue, animationTime, callback) {
+
+  tween(toValue) {
     this.stopTweening();
 
-    this.fromValue = fromValue;
     this.toValue = toValue;
-    this.valueDiff = this.toValue - this.fromValue;
-    this.animationTime = animationTime;
-    this.callback = callback;
-    this.origMS = window.performance.now();
-    this.animationID = window.requestAnimationFrame(this.frame.bind(this));
-  }
-
-  tweenAtSpeed(fromValue, toValue, amountPerMS, callback) {
-    this.tweenInTime(
-      fromValue,
-      toValue,
-      Math.abs(toValue - fromValue) / amountPerMS,
-      callback);
-  }
-
-  frame(timeStamp) {
-    var time_diff = timeStamp - this.origMS;
-    if (time_diff >= this.animationTime) {
-      this.stopTweening();
-      this.callback(this.toValue);
-    } else {
-      this.animationID = window.requestAnimationFrame(this.frame.bind(this));
-      this.callback((time_diff / this.animationTime) * this.valueDiff +
-        this.fromValue);
-    }
+    this.currentMS = window.performance.now();
+    this.animationID = window.requestAnimationFrame(this._frame.bind(this));
   }
 }

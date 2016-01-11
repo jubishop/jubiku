@@ -4,7 +4,7 @@ class JubiSquare {
   static get ROLLED_INDENT() {
     return (JubiSquare.ROLLED_OFF_SIZE - JubiSquare.ROLLED_OVER_SIZE) / 2;
   }
-  static get ANIMATION_VELOCITY() { return 0.2; }
+  static get ANIMATION_VELOCITY() { return 0.4; }
   static get GUTTER_SIZE() { return 10; }
 
   constructor(pen, shouldExist, row, column) {
@@ -12,7 +12,11 @@ class JubiSquare {
     this.pen = pen;
     this.leftEdge = spacing * column;
     this.topEdge = spacing * row;
-    this.tweener = new Tweener();
+    this.tweener = new Tweener(
+      JubiSquare.ROLLED_OFF_SIZE,
+      JubiSquare.ANIMATION_VELOCITY,
+      this.drawSquare.bind(this)
+    );
     this.drawSquare(JubiSquare.ROLLED_OFF_SIZE);
   }
 
@@ -28,8 +32,6 @@ class JubiSquare {
   drawSquare(edgeSize) {
     this.clearSquare();
 
-    this.currentEdge = edgeSize;
-
     var indent = (JubiSquare.ROLLED_OFF_SIZE - edgeSize) / 2;
     this.pen.fillRect(
       this.topEdge + indent,
@@ -40,20 +42,10 @@ class JubiSquare {
   }
 
   rolledOff() {
-    this.tweener.stopTweening();
-    this.tweener.tweenAtSpeed(
-      this.currentEdge,
-      JubiSquare.ROLLED_OFF_SIZE,
-      JubiSquare.ANIMATION_VELOCITY,
-      this.drawSquare.bind(this));
+    this.tweener.tween(JubiSquare.ROLLED_OFF_SIZE);
   }
 
   rolledOver() {
-    this.tweener.stopTweening();
-    this.tweener.tweenAtSpeed(
-      this.currentEdge,
-      JubiSquare.ROLLED_OVER_SIZE,
-      JubiSquare.ANIMATION_VELOCITY,
-      this.drawSquare.bind(this));
+    this.tweener.tween(JubiSquare.ROLLED_OVER_SIZE);
   }
 }
