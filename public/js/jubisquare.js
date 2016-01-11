@@ -49,14 +49,13 @@ class JubiSquare {
   rolledOff() {
     this.clearAnimationID();
 
-    this.lastMS = (new Date()).getTime();
+    this.lastMS = window.performance.now();
     this.animationID = 
       window.requestAnimationFrame(this.animateRolledOff.bind(this));
   }
 
-  animateRolledOff() {
-    var current_ms = (new Date()).getTime();
-    var time_diff = current_ms - this.lastMS;
+  animateRolledOff(timeStamp) {
+    var time_diff = timeStamp - this.lastMS;
 
     var new_edge = Math.min(
       JubiSquare.ROLLED_OFF_SIZE,
@@ -68,7 +67,7 @@ class JubiSquare {
     if (new_edge == JubiSquare.ROLLED_OFF_SIZE) {
       this.clearAnimationID();
     } else {
-      this.lastMS = current_ms;
+      this.lastMS = timeStamp;
       this.animationID =
         window.requestAnimationFrame(this.animateRolledOff.bind(this));
     }
@@ -77,14 +76,13 @@ class JubiSquare {
   rolledOver() {
     this.clearAnimationID();
 
-    this.lastMS = (new Date()).getTime();
+    this.lastMS = window.performance.now();
     this.animationID = 
       window.requestAnimationFrame(this.animateRolledOver.bind(this));
   }
 
-  animateRolledOver() {
-    var current_ms = (new Date()).getTime();
-    var time_diff = current_ms - this.lastMS;
+  animateRolledOver(timeStamp) {
+    var time_diff = timeStamp - this.lastMS;
 
     var new_edge = Math.max(
       JubiSquare.ROLLED_OVER_SIZE,
@@ -96,7 +94,7 @@ class JubiSquare {
     if (new_edge == JubiSquare.ROLLED_OVER_SIZE) {
       this.clearAnimationID();
     } else {
-      this.lastMS = current_ms;
+      this.lastMS = timeStamp;
       this.animationID =
         window.requestAnimationFrame(this.animateRolledOver.bind(this));
     }
