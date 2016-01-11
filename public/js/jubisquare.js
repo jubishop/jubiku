@@ -12,7 +12,7 @@ class JubiSquare {
     this.pen = pen;
     this.leftEdge = spacing * column;
     this.topEdge = spacing * row;
-
+    this.tweener = new Tweener();
     this.drawSquare(JubiSquare.ROLLED_OFF_SIZE);
   }
 
@@ -23,13 +23,6 @@ class JubiSquare {
       JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE,
       JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE
     );
-  }
-
-  clearAnimationID() {
-    if (this.animationID) {
-      window.cancelAnimationFrame(this.animationID);
-      this.animationID = false;
-    }
   }
 
   drawSquare(edgeSize) {
@@ -47,56 +40,20 @@ class JubiSquare {
   }
 
   rolledOff() {
-    this.clearAnimationID();
-
-    this.lastMS = window.performance.now();
-    this.animationID = 
-      window.requestAnimationFrame(this.animateRolledOff.bind(this));
-  }
-
-  animateRolledOff(timeStamp) {
-    var time_diff = timeStamp - this.lastMS;
-
-    var new_edge = Math.min(
+    this.tweener.stopTweening();
+    this.tweener.tweenAtSpeed(
+      this.currentEdge,
       JubiSquare.ROLLED_OFF_SIZE,
-      this.currentEdge + (time_diff * JubiSquare.ANIMATION_VELOCITY)
-    );
-
-    this.drawSquare(new_edge);
-
-    if (new_edge == JubiSquare.ROLLED_OFF_SIZE) {
-      this.clearAnimationID();
-    } else {
-      this.lastMS = timeStamp;
-      this.animationID =
-        window.requestAnimationFrame(this.animateRolledOff.bind(this));
-    }
+      JubiSquare.ANIMATION_VELOCITY,
+      this.drawSquare.bind(this));
   }
 
   rolledOver() {
-    this.clearAnimationID();
-
-    this.lastMS = window.performance.now();
-    this.animationID = 
-      window.requestAnimationFrame(this.animateRolledOver.bind(this));
-  }
-
-  animateRolledOver(timeStamp) {
-    var time_diff = timeStamp - this.lastMS;
-
-    var new_edge = Math.max(
+    this.tweener.stopTweening();
+    this.tweener.tweenAtSpeed(
+      this.currentEdge,
       JubiSquare.ROLLED_OVER_SIZE,
-      this.currentEdge - (time_diff * JubiSquare.ANIMATION_VELOCITY)
-    );
-
-    this.drawSquare(new_edge);
-
-    if (new_edge == JubiSquare.ROLLED_OVER_SIZE) {
-      this.clearAnimationID();
-    } else {
-      this.lastMS = timeStamp;
-      this.animationID =
-        window.requestAnimationFrame(this.animateRolledOver.bind(this));
-    }
+      JubiSquare.ANIMATION_VELOCITY,
+      this.drawSquare.bind(this));
   }
 }
