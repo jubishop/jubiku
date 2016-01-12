@@ -1,9 +1,12 @@
 class Jubiku {
+  
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');
     this.pen.fillStyle = 'green';
 
+    JubiSquare.leftOffset = 100;
+    JubiSquare.topOffset = 100;
     this.jubiSquares = squares.map((rowElement, row) => {
       return rowElement.map((columnValue, column) => {
         return new JubiSquare(this.pen, columnValue, row, column);
@@ -44,8 +47,8 @@ class Jubiku {
 
   getSquareUnderMouse(event) {
     var bounding_rect = this.canvas.getBoundingClientRect();
-    var mouse_x = event.clientX - bounding_rect.left;
-    var mouse_y = event.clientY - bounding_rect.top;
+    var mouse_x = event.clientX - bounding_rect.left - JubiSquare.leftOffset;
+    var mouse_y = event.clientY - bounding_rect.top - JubiSquare.topOffset;
 
     if (mouse_x < 0 || mouse_y < 0) {
       return false; // over left or top of board

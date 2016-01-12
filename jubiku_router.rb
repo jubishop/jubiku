@@ -1,16 +1,35 @@
 class JubikuRouter
-  def self.call(env)
+  def initialize(app, options = {})
+    @app = app
+    @jsDeps = options[:jsDeps]
+  end
+
+  def jsTag(jsFile)
+    tagFiles = Array.new
+
+    addDeps = lambda { |depFile|
+      tagFiles.unshift depFile
+      if (@jsDeps.include? depFile)
+        @jsDeps[depFile].each { |file| addDeps.call(file) }
+      end
+    }
+    addDeps.call(jsFile)
+
+    tagFiles.uniq.map { |file|
+      "<script src='#{file}.js'></script>"
+    }.join("\n")
+  end
+
+  def call(env)
     request = Rack::Request.new env
     response = Rack::Response.new
 
     if request.path == '/game'
-      renderer = ERB.new(File.read('game.erb'))
-      response.write renderer.result
-    else
-      response.write 'URL unsupported'
-      response.status = 404
+      return Rack::Response.new(
+        ERB.new(File.read('game.erb')).result(binding)
+      ).finish
     end
 
-    response.finish
+    @app.call(env)
   end
 end

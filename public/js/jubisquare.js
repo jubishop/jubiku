@@ -4,14 +4,19 @@ class JubiSquare {
   static get ROLLED_INDENT() {
     return (JubiSquare.ROLLED_OFF_SIZE - JubiSquare.ROLLED_OVER_SIZE) / 2;
   }
-  static get ANIMATION_VELOCITY() { return 0.4; }
+  static get ANIMATION_VELOCITY() { return 0.2; }
   static get GUTTER_SIZE() { return 10; }
+  
+  static set offsetLeft(offset) { JubiSquare.leftOffset = offset; }
+  static set offsetTop(offset) { JubiSquare.topOffset = offset; }
 
   constructor(pen, shouldExist, row, column) {
-    var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE
     this.pen = pen;
-    this.leftEdge = spacing * column;
-    this.topEdge = spacing * row;
+
+    var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE
+    this.leftEdge = JubiSquare.leftOffset + spacing * column;
+    this.topEdge = JubiSquare.topOffset + spacing * row;
+
     this.tweener = new Tweener(
       JubiSquare.ROLLED_OFF_SIZE,
       JubiSquare.ANIMATION_VELOCITY,

@@ -3,6 +3,7 @@ require 'rack/utils'
 require 'uri'
 
 require_relative 'jubirack'
+require_relative 'static_js'
 
 module JubiRack
   ALLOW = 'Allow'

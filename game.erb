@@ -2,36 +2,33 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Jubiku</title>
+  <meta charset="utf-8" />
+  <title>Jubiku</title>
 
-    <!-- TODO: Configure JS dependency tree -->
-    <script src='js/lib/tweener.js'></script>
-    <script src='js/jubisquare.js'></script>
-    <script src='js/jubiku.js'></script>
+  <%= jsTag 'js/jubiku' %>
 
-    <script type='text/javascript'>
-        window.onload = function() {
-            var request = new XMLHttpRequest();
-            request.responseType = 'json';
-            request.addEventListener('load', function() {
-                jubiku = new Jubiku(
-                    document.getElementById('jubikuCanvas'),
-                    this.response.squares,
-                    this.response.rowHints,
-                    this.response.columnHints,
-                    this.response.internalNumbers
-                );
-            });
-            request.open('GET', 'json/test1.json');
-            request.send();
-        }
-    </script>
+  <script type='text/javascript'>
+      window.onload = function() {
+          var request = new XMLHttpRequest();
+          request.responseType = 'json';
+          request.addEventListener('load', function() {
+              jubiku = new Jubiku(
+                  document.getElementById('jubikuCanvas'),
+                  this.response.squares,
+                  this.response.rowHints,
+                  this.response.columnHints,
+                  this.response.internalNumbers
+              );
+          });
+          request.open('GET', 'json/test1.json');
+          request.send();
+      }
+  </script>
 </head>
 
 <body>
-    Hello World
-    <canvas id='jubikuCanvas' width='800' height='800'></canvas>
+  Hello World
+  <canvas id='jubikuCanvas' width='800' height='800'></canvas>
 </body>
 
 </html>
