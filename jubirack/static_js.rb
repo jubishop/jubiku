@@ -2,10 +2,10 @@ require_relative 'jubirack'
 
 module JubiRack
   class StaticJS
-    def initialize(app, options = {})
+    def initialize(app, root:, urls:)
       @app = app
-      @root = options[:root]
-      @urls = options[:urls]
+      @root = root
+      @urls = urls
 
       if (@root.nil? || @urls.nil?)
         raise ArgumentError,

@@ -14,10 +14,10 @@ module JubiRack
 
   class BabelJS < StaticJS
     # TODO: Optimize by writing cached transpiled_js to file
-    def initialize(app, options = {})
-      super(app, options)
+    def initialize(app, root:, urls:, options: {})
+      super(app, root: root, urls: urls)
 
-      @options = options[:options] || {}
+      @options = options
 
       babel_path = File.expand_path("../babel.js", __FILE__)
       @compiled_babel_js = ExecJS.compile(File.read(babel_path))

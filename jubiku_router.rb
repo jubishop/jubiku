@@ -1,7 +1,7 @@
 class JubikuRouter
-  def initialize(app, options = {})
+  def initialize(app, jsDeps: {})
     @app = app
-    @jsDeps = options[:jsDeps]
+    @jsDeps = jsDeps
   end
 
   def jsTag(jsFile)
@@ -10,10 +10,10 @@ class JubikuRouter
     addDeps = lambda { |depFile|
       tagFiles.unshift depFile
       if (@jsDeps.include? depFile)
-        @jsDeps[depFile].each { |file| addDeps.call(file) }
+        @jsDeps[depFile].each { |file| addDeps.(file) }
       end
     }
-    addDeps.call(jsFile)
+    addDeps.(jsFile)
 
     tagFiles.uniq.map { |file|
       "<script src='#{file}.js'></script>"
