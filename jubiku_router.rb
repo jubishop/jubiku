@@ -7,13 +7,10 @@ class JubikuRouter
   def jsTag(jsFile)
     tagFiles = Array.new
 
-    addDeps = lambda { |depFile|
+    (addDeps = ->(depFile) {
       tagFiles.unshift depFile
-      if (@jsDeps.include? depFile)
-        @jsDeps[depFile].each { |file| addDeps.(file) }
-      end
-    }
-    addDeps.(jsFile)
+      @jsDeps.fetch(depFile, []).each(&addDeps)
+    }).(jsFile)
 
     tagFiles.uniq.map { |file|
       "<script src='#{file}.js'></script>"

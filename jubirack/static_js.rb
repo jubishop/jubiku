@@ -6,14 +6,8 @@ module JubiRack
       @app = app
       @root = root
       @urls = urls
-
-      if (@root.nil? || @urls.nil?)
-        raise ArgumentError,
-          "Missing required 'root' or 'urls' option"
-      end
-
-      @urls = [@urls] if @urls.kind_of? String
     end
+
     def shouldServe? path
       @urls.any? { |url| path.index(url) == 0 }
     end
