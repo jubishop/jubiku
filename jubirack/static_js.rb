@@ -8,8 +8,12 @@ module JubiRack
       @urls = urls
     end
 
-    protected def jsText(file_path)
-      File.read(file_path)
+    protected def jsText(path)
+      File.read(path)
+    end
+
+    protected def fileExists? path
+      File.file?(path) && File.readable?(path)
     end
 
     def call(env)
@@ -58,10 +62,6 @@ module JubiRack
 
     private def filePath(path)
       File.join(@root, path)
-    end
-
-    private def fileExists? path
-      File.file?(path) && File.readable?(path)
     end
   end
 end

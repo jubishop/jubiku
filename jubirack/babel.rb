@@ -13,7 +13,6 @@ module JubiRack
   MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'
 
   class BabelJS < StaticJS
-    # TODO: Optimize by writing cached transpiled_js to file
     def initialize(app, root:, urls:, options: {})
       super(app, root: root, urls: urls)
 
@@ -23,12 +22,33 @@ module JubiRack
       @compiled_babel_js = ExecJS.compile(File.read(babel_path))
     end
 
-    def jsText(file_path)
-      @compiled_babel_js.call(
-        'Babel.transform',
-        File.read(file_path),
-        @options.merge({'ast' => false})
-      )['code']
+    def babelPath(path)
+      "#{path}.babel"
+    end
+
+    def babelMTime(path)
+      if (fileExists? path)
+        File.mtime(path).to_i
+      else
+        0
+      end
+    end
+
+    def jsText(path)
+      if File.mtime(path).to_i > babelMTime(babelPath(path))
+        babel_code = @compiled_babel_js.call(
+          'Babel.transform',
+          File.read(path),
+          @options.merge({'ast' => false})
+        )['code']
+
+        File.open(babelPath(path), File::CREAT|File::WRONLY) { |file|
+          file.write babel_code
+        }
+        babel_code
+      else
+        File.read(babelPath(path))
+      end
     end
   end
 end
