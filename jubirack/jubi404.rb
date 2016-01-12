@@ -1,4 +1,4 @@
-class Jubiku404
+class Jubi404
   def self.call(env)
     Rack::Response.new('Path Not Found', 404).finish
   end

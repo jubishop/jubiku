@@ -1,6 +1,6 @@
 require_relative 'jubirack/babel'
+require_relative 'jubirack/jubi404'
 require_relative 'jubiku_router'
-require_relative 'jubiku_404'
 
 use Rack::Static,
   :urls => ['/css/', '/json/'],
@@ -14,4 +14,4 @@ use JubikuRouter,
     'js/jubiku' => ['js/jubisquare'],
     'js/jubisquare' => ['js/lib/tweener']
   }
-run Jubiku404
+run Jubi404

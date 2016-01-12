@@ -1,5 +1,4 @@
 class Jubiku {
-  
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');

@@ -8,27 +8,7 @@ module JubiRack
       @urls = urls
     end
 
-    def shouldServe? path
-      @urls.any? { |url| path.index(url) == 0 }
-    end
-
-    # TODO: Replace URI::DEFAULT_PARSER with Rack::Utils.unescape_path
-    def filePath(path)
-      File.join(
-        @root,
-        Rack::Utils.clean_path_info(URI::DEFAULT_PARSER.unescape path)
-      )
-    end
-
-    def fileExists? path
-      begin
-        File.file?(path) && File.readable?(path)
-      rescue
-        false
-      end
-    end
-
-    def jsText(file_path)
+    protected def jsText(file_path)
       File.read(file_path)
     end
 
@@ -44,8 +24,7 @@ module JubiRack
       if shouldServe? request.path_info
         file_path = filePath(request.path_info)
         unless (File.extname(file_path) == '.js')
-          raise SecurityError,
-            "#{file_path} must be a .js file"
+          raise SecurityError, "#{file_path} must be a .js file"
         end
 
         if fileExists? file_path
@@ -71,6 +50,18 @@ module JubiRack
       else
         @app.call(env)
       end
+    end
+
+    private def shouldServe? path
+      @urls.any? { |url| path.index(url) == 0 }
+    end
+
+    private def filePath(path)
+      File.join(@root, path)
+    end
+
+    private def fileExists? path
+      File.file?(path) && File.readable?(path)
     end
   end
 end
