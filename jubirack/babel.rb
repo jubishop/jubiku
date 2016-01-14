@@ -3,52 +3,66 @@ require 'rack/utils'
 require 'uri'
 
 require_relative 'jubirack'
-require_relative 'static_js'
 
-# TODO: Just write babel file and let Rack::Static serve it!
 module JubiRack
-  ALLOW = 'Allow'
-  ALLOWED_VERBS = %w[GET HEAD OPTIONS]
-  ALLOW_HEADER = ALLOWED_VERBS.join(', ')
-  CONTENT_JAVASCRIPT = 'application/javascript'
-  MODIFIED_SINCE = 'HTTP_IF_MODIFIED_SINCE'
-
-  class BabelJS < StaticJS
-    def initialize(app, root:, urls:, options: {})
-      super(app, root: root, urls: urls)
-
+  class BabelJS
+    def initialize(app, options: {})
+      @app = app
       @options = options
 
       babel_path = File.expand_path("../babel.js", __FILE__)
       @compiled_babel_js = ExecJS.compile(File.read(babel_path))
     end
 
-    def babelPath(path)
-      "#{path}.babel"
+    def call(env)
+      request = Rack::Request.new env
+
+      if shouldServe? request.path_info
+        unless (File.extname(request.path_info) == '.js')
+          raise SecurityError, "#{request.path_info} must be a .js file"
+        end
+
+        source_path = sourcePath(request.path_info)
+        if fileExists? source_path
+          target_path = targetPath(request.path_info)
+          if File.mtime(source_path).to_i > mTime(target_path)
+            File.open(target_path, File::CREAT|File::WRONLY) { |file|
+              file.write @compiled_babel_js.call(
+                'Babel.transform',
+                File.read(source_path),
+                @options.merge({'ast' => false})
+              )['code']
+            }
+          end
+        end
+      end
+
+      @app.call(env)
     end
 
-    def babelMTime(path)
+    private def shouldServe? path
+      path.index('/js/') == 0
+    end
+
+    private def fileExists? path
+      File.file?(path) && File.readable?(path)
+    end
+
+    private def sourcePath(path)
+      dir, file = *File.split(path)
+      bjs_file = "#{File.basename(file, '.js')}.bjs"
+      File.join('public', dir, '/babel', bjs_file)
+    end
+
+    private def targetPath(path)
+      File.join('public', path)
+    end
+
+    private def mTime(path)
       if (fileExists? path)
         File.mtime(path).to_i
       else
         0
-      end
-    end
-
-    def jsText(path)
-      if File.mtime(path).to_i > babelMTime(babelPath(path))
-        babel_code = @compiled_babel_js.call(
-          'Babel.transform',
-          File.read(path),
-          @options.merge({'ast' => false})
-        )['code']
-
-        File.open(babelPath(path), File::CREAT|File::WRONLY) { |file|
-          file.write babel_code
-        }
-        babel_code
-      else
-        File.read(babelPath(path))
       end
     end
   end
