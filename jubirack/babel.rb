@@ -5,6 +5,7 @@ require 'uri'
 require_relative 'jubirack'
 require_relative 'static_js'
 
+# TODO: Just write babel file and let Rack::Static serve it!
 module JubiRack
   ALLOW = 'Allow'
   ALLOWED_VERBS = %w[GET HEAD OPTIONS]
