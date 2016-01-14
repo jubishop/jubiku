@@ -1,8 +1,8 @@
 class Jubiku {
+  static get SQUARE_COLOR() { return 'green'; }
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');
-    this.pen.fillStyle = 'green';
 
     JubiSquare.leftOffset = 100;
     JubiSquare.topOffset = 100;
@@ -11,6 +11,8 @@ class Jubiku {
         return new JubiSquare(this.pen, columnValue, row, column);
       });
     });
+
+    this.jubiColumnArrow = new JubiColumnArrow(this.pen);
 
     this.canvas.addEventListener('mouseenter', this.mouseEnter.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));
@@ -32,12 +34,23 @@ class Jubiku {
   }
 
   mouseMove(event) {
-    var current_square = this.getSquareUnderMouse(event);
-    if (current_square != this.currentSquare) {
+    var new_square = this.getSquareUnderMouse(event);
+    if (new_square != this.currentSquare) {
+      if (this.currentSquare && (!new_square || 
+        new_square.column != this.currentSquare.column)) {
+        this.jubiColumnArrow.clearArrow();
+      }
+      if (new_square && (!this.currentSquare ||
+        new_square.column != this.currentSquare.column)) {
+        this.jubiColumnArrow.drawArrow(
+          new_square.leftEdge + JubiSquare.ROLLED_OFF_SIZE / 2
+        );
+      }
+
       if (this.currentSquare) {
         this.currentSquare.rolledOff();
       }
-      this.currentSquare = current_square;
+      this.currentSquare = new_square;
       if (this.currentSquare) {
         this.currentSquare.rolledOver();
       }
@@ -55,8 +68,8 @@ class Jubiku {
 
     var square_plus_gutter = JubiSquare.ROLLED_OFF_SIZE +
        JubiSquare.GUTTER_SIZE;
-    var column = Math.floor(mouse_x / square_plus_gutter);
-    var row = Math.floor(mouse_y / square_plus_gutter);
+    var column = Math.floor(mouse_y / square_plus_gutter);
+    var row = Math.floor(mouse_x / square_plus_gutter);
 
     if (column >= this.jubiSquares.length ||
       row >= this.jubiSquares[0].length) {

@@ -1,0 +1,22 @@
+class JubiColumnArrow {
+  constructor(pen) {
+    this.pen = pen;
+  }
+
+  clearArrow() {
+  }
+
+  drawArrow(xPos) {
+    this.clearArrow();
+    
+    this.pen.beginPath();
+    this.pen.moveTo(xPos, 0);
+    this.pen.lineTo(xPos - 20, 20);
+    this.pen.lineTo(xPos + 20, 20);
+    this.pen.closePath();
+ 
+    // the fill color
+    this.pen.fillStyle = "#FFCC00";
+    this.pen.fill();
+  }
+}

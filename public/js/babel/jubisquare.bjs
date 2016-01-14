@@ -4,6 +4,7 @@ class JubiSquare {
   static get ROLLED_INDENT() {
     return (JubiSquare.ROLLED_OFF_SIZE - JubiSquare.ROLLED_OVER_SIZE) / 2;
   }
+  static get SQUARE_COLOR() { return 'green'; }
   static get ANIMATION_VELOCITY() { return 0.2; }
   static get GUTTER_SIZE() { return 10; }
   
@@ -13,9 +14,12 @@ class JubiSquare {
   constructor(pen, shouldExist, row, column) {
     this.pen = pen;
 
+    this.row = row;
+    this.column = column;
+
     var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE
-    this.leftEdge = JubiSquare.leftOffset + spacing * column;
-    this.topEdge = JubiSquare.topOffset + spacing * row;
+    this.leftEdge = JubiSquare.leftOffset + spacing * this.column;
+    this.topEdge = JubiSquare.topOffset + spacing * this.row;
 
     this.tweener = new Tweener(
       JubiSquare.ROLLED_OFF_SIZE,
@@ -27,8 +31,8 @@ class JubiSquare {
 
   clearSquare() {
     this.pen.clearRect(
-      this.topEdge - (JubiSquare.GUTTER_SIZE / 2),
       this.leftEdge - (JubiSquare.GUTTER_SIZE / 2),
+      this.topEdge - (JubiSquare.GUTTER_SIZE / 2),
       JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE,
       JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE
     );
@@ -38,9 +42,10 @@ class JubiSquare {
     this.clearSquare();
 
     var indent = (JubiSquare.ROLLED_OFF_SIZE - edgeSize) / 2;
+    this.pen.fillStyle = JubiSquare.SQUARE_COLOR;
     this.pen.fillRect(
-      this.topEdge + indent,
       this.leftEdge + indent,
+      this.topEdge + indent,
       edgeSize,
       edgeSize
     );
