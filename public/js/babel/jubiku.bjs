@@ -17,19 +17,15 @@ class Jubiku {
     this.jubiColumnArrow = new JubiColumnArrow(this.pen);
     this.jubiRowArrow = new JubiRowArrow(this.pen);
 
-    this.canvas.addEventListener('mouseenter', this.mouseEnter.bind(this));
+    this.canvas.addEventListener('mouseenter', this.mouseMove.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));
     this.canvas.addEventListener('mousemove', this.mouseMove.bind(this));
   }
 
-  mouseEnter() {
-    this.currentSquare = this.getSquareUnderMouse(event);
-    if (this.currentSquare) {
-      this.currentSquare.rolledOver();
-    }
-  }
+  mouseLeave(event) {
+    this.jubiColumnArrow.clearArrow();
+    this.jubiRowArrow.clearArrow();
 
-  mouseLeave() {
     if (this.currentSquare) {
       this.currentSquare.rolledOff();
     }
