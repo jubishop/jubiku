@@ -1,7 +1,8 @@
 .sass-cache/
 
-*.css*
-*.js*
+*.css
+*.map
+public/js/*.js
 
 .DS_Store
 .tm_properties
