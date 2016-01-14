@@ -1,0 +1,3 @@
+includeFiles = "{$includeFiles,.gitignore}"
+excludeFiles = "{$excludeFiles,LICENSE,clones,public/js/*.js,*.css,*.map}"
+excludeInFolderSearch = "{$excludeInFolderSearch,clones,LICENSE}"
