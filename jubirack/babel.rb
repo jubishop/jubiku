@@ -23,17 +23,15 @@ module JubiRack
         end
 
         source_path = sourcePath(request.path_info)
-        if fileExists? source_path
-          target_path = targetPath(request.path_info)
-          if File.mtime(source_path).to_i > mTime(target_path)
-            File.open(target_path, File::CREAT|File::WRONLY) { |file|
-              file.write @compiled_babel_js.call(
-                'Babel.transform',
-                File.read(source_path),
-                @options.merge({'ast' => false})
-              )['code']
-            }
-          end
+        target_path = targetPath(request.path_info)
+        if mTime(source_path) > mTime(target_path)
+          File.open(target_path, File::CREAT|File::WRONLY|File::TRUNC) { |file|
+            file.write @compiled_babel_js.call(
+              'Babel.transform',
+              File.read(source_path),
+              @options.merge({'ast' => false})
+            )['code']
+          }
         end
       end
 
