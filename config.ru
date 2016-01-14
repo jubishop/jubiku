@@ -1,9 +1,12 @@
+require 'sass/plugin/rack'
+
 require_relative 'jubirack/babel'
 require_relative 'jubirack/jubi404'
 require_relative 'jubiku_router'
 
+use Sass::Plugin::Rack
 use Rack::Static,
-  :urls => ['/css/', '/json/'],
+  :urls => ['/stylesheets/', '/json/'],
   :root => 'public'
 use JubiRack::BabelJS,
   :urls => ['/js/'],
