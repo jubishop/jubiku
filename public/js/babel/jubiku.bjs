@@ -1,11 +1,13 @@
 class Jubiku {
-  static get SQUARE_COLOR() { return 'green'; }
+  static get ARROW_MARGIN() { return 5; }
+
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');
 
-    JubiSquare.leftOffset = 100;
-    JubiSquare.topOffset = 100;
+    JubiSquare.leftOffset = JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
+    JubiSquare.topOffset = JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
+
     this.jubiSquares = squares.map((rowElement, row) => {
       return rowElement.map((columnValue, column) => {
         return new JubiSquare(this.pen, columnValue, row, column);
@@ -13,6 +15,7 @@ class Jubiku {
     });
 
     this.jubiColumnArrow = new JubiColumnArrow(this.pen);
+    this.jubiRowArrow = new JubiRowArrow(this.pen);
 
     this.canvas.addEventListener('mouseenter', this.mouseEnter.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));
@@ -44,6 +47,17 @@ class Jubiku {
         new_square.column != this.currentSquare.column)) {
         this.jubiColumnArrow.drawArrow(
           new_square.leftEdge + JubiSquare.ROLLED_OFF_SIZE / 2
+        );
+      }
+
+      if (this.currentSquare && (!new_square || 
+        new_square.row != this.currentSquare.row)) {
+        this.jubiRowArrow.clearArrow();
+      }
+      if (new_square && (!this.currentSquare ||
+        new_square.row != this.currentSquare.row)) {
+        this.jubiRowArrow.drawArrow(
+          new_square.topEdge + JubiSquare.ROLLED_OFF_SIZE / 2
         );
       }
 

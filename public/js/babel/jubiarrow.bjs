@@ -1,22 +1,68 @@
+class JubiArrow {
+  static get ARROW_HEIGHT() { return 20; }
+  static get ARROW_WIDTH() { return 40; }
+
+  static get ARROW_COLOR() { return 'blue'; }
+}
+
 class JubiColumnArrow {
   constructor(pen) {
     this.pen = pen;
   }
 
   clearArrow() {
+    this.pen.clearRect(
+      this.xPos - JubiArrow.ARROW_WIDTH / 2,
+      0,
+      JubiArrow.ARROW_WIDTH,
+      JubiArrow.ARROW_HEIGHT
+    );
   }
 
   drawArrow(xPos) {
     this.clearArrow();
-    
+
+    this.xPos = xPos;
+
     this.pen.beginPath();
     this.pen.moveTo(xPos, 0);
-    this.pen.lineTo(xPos - 20, 20);
-    this.pen.lineTo(xPos + 20, 20);
+    this.pen.lineTo(xPos - JubiArrow.ARROW_WIDTH / 2, JubiArrow.ARROW_HEIGHT);
+    this.pen.lineTo(xPos + JubiArrow.ARROW_WIDTH / 2, JubiArrow.ARROW_HEIGHT);
     this.pen.closePath();
- 
+
     // the fill color
-    this.pen.fillStyle = "#FFCC00";
+    this.pen.fillStyle = JubiArrow.ARROW_COLOR;
+    this.pen.fill();
+  }
+}
+
+class JubiRowArrow {
+  constructor(pen) {
+    this.pen = pen;
+  }
+
+  clearArrow() {
+    this.pen.clearRect(
+      0,
+      this.yPos - JubiArrow.ARROW_WIDTH / 2,
+      JubiArrow.ARROW_HEIGHT,
+      JubiArrow.ARROW_WIDTH
+    );
+  }
+
+  drawArrow(yPos) {
+    this.clearArrow();
+
+    this.yPos = yPos;
+
+    this.pen.beginPath();
+    this.pen.moveTo(0, yPos);
+    this.pen.lineTo(JubiArrow.ARROW_HEIGHT, yPos - JubiArrow.ARROW_WIDTH / 2);
+    this.pen.lineTo(JubiArrow.ARROW_HEIGHT, yPos + JubiArrow.ARROW_WIDTH / 2);
+    this.pen.closePath();
+
+    // the fill color
+    this.pen.fillStyle = JubiArrow.ARROW_COLOR;
     this.pen.fill();
   }
 }
