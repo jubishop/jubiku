@@ -5,8 +5,25 @@ class Jubiku {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');
 
-    JubiSquare.leftOffset = JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
-    JubiSquare.topOffset = JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
+    // Set Static Vars
+    JubiHint.gutterSize = JubiSquare.GUTTER_SIZE;
+    JubiHint.squareSize = JubiSquare.ROLLED_OFF_SIZE;
+
+    JubiArrow.leftOffset = JubiHint.HINT_WIDTH;
+    JubiArrow.topOffset = JubiHint.HINT_HEIGHT;
+
+    JubiSquare.leftOffset = JubiHint.HINT_WIDTH +
+      JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
+    JubiSquare.topOffset = JubiHint.HINT_HEIGHT + 
+      JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
+
+    // Create game objects (hints, arrows, squares)
+    this.rowHints = rowHints.map((rowHint, row) => {
+      return new JubiRowHint(this.pen, rowHint, row, JubiSquare.topOffset);
+    });
+
+    this.jubiColumnArrow = new JubiColumnArrow(this.pen);
+    this.jubiRowArrow = new JubiRowArrow(this.pen);
 
     this.jubiSquares = squares.map((rowElement, row) => {
       return rowElement.map((columnValue, column) => {
@@ -14,9 +31,7 @@ class Jubiku {
       });
     });
 
-    this.jubiColumnArrow = new JubiColumnArrow(this.pen);
-    this.jubiRowArrow = new JubiRowArrow(this.pen);
-
+    // Listen to the mouse
     this.canvas.addEventListener('mouseenter', this.mouseMove.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));
     this.canvas.addEventListener('mousemove', this.mouseMove.bind(this));
@@ -35,7 +50,7 @@ class Jubiku {
   mouseMove(event) {
     var new_square = this.getSquareUnderMouse(event);
     if (new_square != this.currentSquare) {
-      if (this.currentSquare && (!new_square || 
+      if (this.currentSquare && (!new_square ||
         new_square.column != this.currentSquare.column)) {
         this.jubiColumnArrow.clearArrow();
       }
@@ -46,7 +61,7 @@ class Jubiku {
         );
       }
 
-      if (this.currentSquare && (!new_square || 
+      if (this.currentSquare && (!new_square ||
         new_square.row != this.currentSquare.row)) {
         this.jubiRowArrow.clearArrow();
       }

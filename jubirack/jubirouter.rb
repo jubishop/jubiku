@@ -4,6 +4,8 @@ class JubiRouter
     @jsDeps = jsDeps
   end
 
+  # TODO: Put this in Babel.rb and output just one file
+  # TODO: Preprocess for faster production speeds
   protected def jsTag(jsFile)
     tagFiles = Array.new
 

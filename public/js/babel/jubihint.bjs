@@ -1,0 +1,37 @@
+class JubiHint {
+  static get HINT_HEIGHT() { return 50; }
+  static get HINT_WIDTH() { return 50; }
+  
+  constructor(pen, hint, pos, offset) {
+    if (this.constructor == JubiHint) {
+      throw new TypeError("JubiArrow is an abstract class");
+    }
+
+    this.pen = pen;
+    this.hint = hint;
+    this.pos = pos;
+
+    this.pen.font = "30px Arial";
+
+    var spacing = JubiHint.squareSize + JubiHint.gutterSize;
+    this.pixelPos = offset + spacing * pos + JubiHint.squareSize / 2;
+
+    this.drawUnsolved();
+  }
+
+  drawUnsolved() {
+    throw new TypeError("drawUnsolved is a virtual function");
+  }
+}
+
+class JubiRowHint extends JubiHint {
+  drawUnsolved() {
+    console.log(this.hint);
+    if (this.hint) {
+      var text = this.hint.constructor == Array ?
+        this.hint.join(" ") :
+        '[' + this.hint.toString() + ']';
+      this.pen.fillText(text, 0, this.pixelPos);  
+    }
+  }
+}

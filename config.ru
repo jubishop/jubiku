@@ -12,7 +12,7 @@ use Rack::Static,
   :root => 'public'
 use JubikuRouter,
   :jsDeps => {
-    'js/jubiku' => ['js/jubisquare', 'js/jubiarrow'],
+    'js/jubiku' => ['js/jubisquare', 'js/jubiarrow', 'js/jubihint'],
     'js/jubisquare' => ['js/tweener']
   }
 run Jubi404

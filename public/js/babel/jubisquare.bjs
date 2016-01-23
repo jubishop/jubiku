@@ -7,9 +7,6 @@ class JubiSquare {
   static get SQUARE_COLOR() { return 'green'; }
   static get ANIMATION_VELOCITY() { return 0.2; }
   static get GUTTER_SIZE() { return 10; }
-  
-  static set offsetLeft(offset) { JubiSquare.leftOffset = offset; }
-  static set offsetTop(offset) { JubiSquare.topOffset = offset; }
 
   constructor(pen, shouldExist, row, column) {
     this.pen = pen;
