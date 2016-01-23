@@ -1,29 +1,36 @@
 class Jubiku {
   static get ARROW_MARGIN() { return 5; }
+  static get HINT_MARGIN() { return 5; }
 
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
     this.pen = this.canvas.getContext('2d');
 
     // Set Static Vars
-    JubiHint.gutterSize = JubiSquare.GUTTER_SIZE;
-    JubiHint.squareSize = JubiSquare.ROLLED_OFF_SIZE;
-
-    JubiArrow.leftOffset = JubiHint.HINT_WIDTH;
-    JubiArrow.topOffset = JubiHint.HINT_HEIGHT;
-
-    JubiSquare.leftOffset = JubiHint.HINT_WIDTH +
+    JubiSquare.leftOffset = JubiHint.HINT_WIDTH + Jubiku.HINT_MARGIN +
       JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
-    JubiSquare.topOffset = JubiHint.HINT_HEIGHT + 
+    JubiSquare.topOffset = JubiHint.HINT_HEIGHT + Jubiku.HINT_MARGIN +
       JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
 
     // Create game objects (hints, arrows, squares)
+    var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE;
+    var half_square = JubiSquare.ROLLED_OFF_SIZE / 2;
     this.rowHints = rowHints.map((rowHint, row) => {
-      return new JubiRowHint(this.pen, rowHint, row, JubiSquare.topOffset);
+      return new JubiRowHint(
+        this.pen,
+        rowHint,
+        JubiSquare.topOffset + spacing * row + half_square
+      );
     });
 
-    this.jubiColumnArrow = new JubiColumnArrow(this.pen);
-    this.jubiRowArrow = new JubiRowArrow(this.pen);
+    this.jubiColumnArrow = new JubiColumnArrow(
+      this.pen,
+      JubiHint.HINT_HEIGHT + Jubiku.HINT_MARGIN
+    );
+    this.jubiRowArrow = new JubiRowArrow(
+      this.pen,
+      JubiHint.HINT_WIDTH + Jubiku.HINT_MARGIN
+    );
 
     this.jubiSquares = squares.map((rowElement, row) => {
       return rowElement.map((columnValue, column) => {

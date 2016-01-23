@@ -3,15 +3,14 @@ class JubiArrow {
   static get ARROW_WIDTH() { return 40; }
 
   static get ARROW_COLOR() { return 'blue'; }
-
-  static set offsetLeft(offset) { JubiSquare.leftOffset = offset; }
   
-  constructor(pen) {
+  constructor(pen, offset) {
     if (this.constructor == JubiArrow) {
       throw new TypeError("JubiArrow is an abstract class");
     }
 
     this.pen = pen;
+    this.offset = offset;
   }
 
   _clearArrow() {
@@ -42,7 +41,7 @@ class JubiColumnArrow extends JubiArrow {
   _clearArrow() {
     this.pen.clearRect(
       this.pos - JubiArrow.ARROW_WIDTH / 2 - 2,
-      JubiArrow.topOffset - 2,
+      this.offset - 2,
       JubiArrow.ARROW_WIDTH + 4,
       JubiArrow.ARROW_HEIGHT + 4
     );
@@ -50,14 +49,14 @@ class JubiColumnArrow extends JubiArrow {
 
   _drawArrow() {
     this.pen.beginPath();
-    this.pen.moveTo(this.pos, JubiArrow.topOffset);
+    this.pen.moveTo(this.pos, this.offset);
     this.pen.lineTo(
       this.pos - JubiArrow.ARROW_WIDTH / 2,
-      JubiArrow.topOffset + JubiArrow.ARROW_HEIGHT
+      this.offset + JubiArrow.ARROW_HEIGHT
     );
     this.pen.lineTo(
       this.pos + JubiArrow.ARROW_WIDTH / 2,
-      JubiArrow.topOffset + JubiArrow.ARROW_HEIGHT
+      this.offset + JubiArrow.ARROW_HEIGHT
     );
     this.pen.closePath();
   }
@@ -66,7 +65,7 @@ class JubiColumnArrow extends JubiArrow {
 class JubiRowArrow extends JubiArrow {
   _clearArrow() {
     this.pen.clearRect(
-      JubiArrow.leftOffset - 2,
+      this.offset - 2,
       this.pos - JubiArrow.ARROW_WIDTH / 2 - 2,
       JubiArrow.ARROW_HEIGHT + 4,
       JubiArrow.ARROW_WIDTH + 4
@@ -75,13 +74,13 @@ class JubiRowArrow extends JubiArrow {
 
   _drawArrow() {
     this.pen.beginPath();
-    this.pen.moveTo(JubiArrow.leftOffset, this.pos);
+    this.pen.moveTo(this.offset, this.pos);
     this.pen.lineTo(
-      JubiArrow.leftOffset + JubiArrow.ARROW_HEIGHT,
+      this.offset + JubiArrow.ARROW_HEIGHT,
       this.pos - JubiArrow.ARROW_WIDTH / 2
     );
     this.pen.lineTo(
-      JubiArrow.leftOffset + JubiArrow.ARROW_HEIGHT,
+      this.offset + JubiArrow.ARROW_HEIGHT,
       this.pos + JubiArrow.ARROW_WIDTH / 2
     );
     this.pen.closePath();

@@ -1,8 +1,10 @@
 class JubiHint {
   static get HINT_HEIGHT() { return 50; }
   static get HINT_WIDTH() { return 50; }
-  
-  constructor(pen, hint, pos, offset) {
+
+  static get FONT_SIZE() { return 30; }
+
+  constructor(pen, hint, pos) {
     if (this.constructor == JubiHint) {
       throw new TypeError("JubiArrow is an abstract class");
     }
@@ -11,10 +13,7 @@ class JubiHint {
     this.hint = hint;
     this.pos = pos;
 
-    this.pen.font = "30px Arial";
-
-    var spacing = JubiHint.squareSize + JubiHint.gutterSize;
-    this.pixelPos = offset + spacing * pos + JubiHint.squareSize / 2;
+    this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
 
     this.drawUnsolved();
   }
@@ -26,12 +25,17 @@ class JubiHint {
 
 class JubiRowHint extends JubiHint {
   drawUnsolved() {
-    console.log(this.hint);
     if (this.hint) {
+      this.pen.textBaseline = 'bottom';
+      this.pen.textAlign = 'right';
       var text = this.hint.constructor == Array ?
         this.hint.join(" ") :
         '[' + this.hint.toString() + ']';
-      this.pen.fillText(text, 0, this.pixelPos);  
+      this.pen.fillText(
+        text,
+        JubiHint.HINT_WIDTH,
+        this.pos + JubiHint.FONT_SIZE / 2
+      );
     }
   }
 }
