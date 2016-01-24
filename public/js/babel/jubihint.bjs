@@ -3,6 +3,7 @@ class JubiHint {
   static get HINT_WIDTH() { return 50; }
 
   static get FONT_SIZE() { return 30; }
+  static get HINT_SPACING() { return 10; }
 
   constructor(pen, hint, pos) {
     if (this.constructor == JubiHint) {
@@ -10,7 +11,16 @@ class JubiHint {
     }
 
     this.pen = pen;
-    this.hint = hint;
+    if (hint) {
+      this.multipleHints = (hint.constructor == Array);
+      this.hints = this.multipleHints ?
+        hint.map(h => h.toString()) :
+        ['[' + hint.toString() + ']'];
+    } else {
+      this.hints = false;
+    }
+
+    console.log(this.hints);
     this.pos = pos;
 
     this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
@@ -25,17 +35,40 @@ class JubiHint {
 
 class JubiRowHint extends JubiHint {
   drawUnsolved() {
-    if (this.hint) {
-      this.pen.textBaseline = 'bottom';
+    if (this.hints) {
+      this.pen.textBaseline = 'middle';
       this.pen.textAlign = 'right';
-      var text = this.hint.constructor == Array ?
-        this.hint.join(" ") :
-        '[' + this.hint.toString() + ']';
-      this.pen.fillText(
-        text,
-        JubiHint.HINT_WIDTH,
-        this.pos + JubiHint.FONT_SIZE / 2
-      );
+
+      var xPos = JubiHint.HINT_WIDTH;
+      for (var i = this.hints.length - 1; i >= 0; i--) {
+        var hint = this.hints[i];
+        this.pen.fillText(
+          hint,
+          xPos,
+          this.pos
+        );
+        xPos -= this.pen.measureText(hint).width + JubiHint.HINT_SPACING;
+      }
     }
   }
+}
+
+class JubiColumnHint extends JubiHint {
+  drawUnsolved() {
+    if (this.hints) {
+      this.pen.textBaseline = 'bottom';
+      this.pen.textAlign = 'center';
+
+      var yPos = JubiHint.HINT_HEIGHT;
+      for (var i = this.hints.length - 1; i >= 0; i--) {
+        var hint = this.hints[i];
+        this.pen.fillText(
+          hint,
+          this.pos,
+          yPos
+        );
+        yPos -= JubiHint.FONT_SIZE + JubiHint.HINT_SPACING;
+      }
+    }
+  }  
 }

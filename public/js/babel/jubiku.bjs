@@ -1,6 +1,6 @@
 class Jubiku {
   static get ARROW_MARGIN() { return 5; }
-  static get HINT_MARGIN() { return 5; }
+  static get HINT_MARGIN() { return 10; }
 
   constructor(canvas, squares, rowHints, columnHints, internalNumbers) {
     this.canvas = canvas;
@@ -20,6 +20,13 @@ class Jubiku {
         this.pen,
         rowHint,
         JubiSquare.topOffset + spacing * row + half_square
+      );
+    });
+    this.columnHints = columnHints.map((columnHint, column) => {
+      return new JubiColumnHint(
+        this.pen,
+        columnHint,
+        JubiSquare.leftOffset + spacing * column + half_square
       );
     });
 
