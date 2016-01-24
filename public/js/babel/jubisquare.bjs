@@ -18,6 +18,8 @@ class JubiSquare {
     this.leftEdge = JubiSquare.leftOffset + spacing * this.column;
     this.topEdge = JubiSquare.topOffset + spacing * this.row;
 
+    this.shouldExist = Boolean(shouldExist);
+
     this.tweener = new Tweener(
       JubiSquare.ROLLED_OFF_SIZE,
       JubiSquare.ANIMATION_VELOCITY,

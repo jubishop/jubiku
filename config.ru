@@ -8,7 +8,7 @@ use Sass::Plugin::Rack
 use JubiRack::BabelJS,
   :options => { 'presets' => ['es2015'] }
 use Rack::Static,
-  :urls => ['/js/', '/json/', '/stylesheets/'],
+  :urls => ['/images/', '/js/', '/json/', '/stylesheets/'],
   :root => 'public'
 use JubikuRouter,
   :jsDeps => {

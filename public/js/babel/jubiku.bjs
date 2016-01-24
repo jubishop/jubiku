@@ -49,6 +49,8 @@ class Jubiku {
     this.canvas.addEventListener('mouseenter', this.mouseMove.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));
     this.canvas.addEventListener('mousemove', this.mouseMove.bind(this));
+    this.canvas.addEventListener('click', this.click.bind(this));
+    this.canvas.addEventListener('contextmenu', this.rightClick.bind(this));
   }
 
   mouseLeave(event) {
@@ -94,6 +96,23 @@ class Jubiku {
         this.currentSquare.rolledOver();
       }
     }
+  }
+
+  click(event) {
+    var clicked_square = this.getSquareUnderMouse(event);
+    if (clicked_square) {
+      console.log("clicked: " + clicked_square.column + ", " + clicked_square.row);
+    }
+  }
+
+  rightClick(event) {
+    var right_clicked_square = this.getSquareUnderMouse(event);
+    if (right_clicked_square) {
+      console.log("right_clicked: " + right_clicked_square.column + ", " + right_clicked_square.row);   
+    }
+
+    event.preventDefault();
+    return false;
   }
 
   getSquareUnderMouse(event) {

@@ -20,7 +20,6 @@ class JubiHint {
       this.hints = false;
     }
 
-    console.log(this.hints);
     this.pos = pos;
 
     this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
