@@ -4,6 +4,7 @@ require 'uri'
 
 require_relative 'jubirack'
 
+# TODO: Make sure Babel.js is updated
 module JubiRack
   class BabelJS
     def initialize(app, options: {})

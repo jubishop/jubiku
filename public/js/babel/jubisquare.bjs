@@ -1,11 +1,10 @@
 class JubiSquare {
   static get ROLLED_OFF_SIZE() { return 100; }
   static get ROLLED_OVER_SIZE() { return 80; }
-  static get ROLLED_INDENT() {
-    return (JubiSquare.ROLLED_OFF_SIZE - JubiSquare.ROLLED_OVER_SIZE) / 2;
-  }
+
   static get SQUARE_COLOR() { return 'green'; }
   static get ANIMATION_VELOCITY() { return 0.2; }
+  static get SHRINK_VELOCITY() { return 0.8; }
   static get GUTTER_SIZE() { return 10; }
 
   constructor(pen, shouldExist, row, column) {
@@ -19,16 +18,56 @@ class JubiSquare {
     this.topEdge = JubiSquare.topOffset + spacing * this.row;
 
     this.shouldExist = Boolean(shouldExist);
+    this.kept = this.removed = false;
 
     this.tweener = new Tweener(
       JubiSquare.ROLLED_OFF_SIZE,
       JubiSquare.ANIMATION_VELOCITY,
-      this.drawSquare.bind(this)
+      this._drawSquare.bind(this)
     );
-    this.drawSquare(JubiSquare.ROLLED_OFF_SIZE);
+    this._drawSquare(JubiSquare.ROLLED_OFF_SIZE);
   }
 
-  clearSquare() {
+  rolledOff() {
+    if (this.kept || this.removed) return;
+    this.tweener.tween(JubiSquare.ROLLED_OFF_SIZE);
+  }
+
+  rolledOver() {
+    if (this.kept || this.removed) return;
+    this.tweener.tween(JubiSquare.ROLLED_OVER_SIZE);
+  }
+
+  keep() {
+    if (!this.shouldExist) {
+      throw new Error("Square Should Go");
+    }
+
+    if (this.kept) {
+      return false;
+    } else {
+      this.tweener.tween(JubiSquare.ROLLED_OFF_SIZE);
+      this.kept = true;
+      return true;
+    }
+  }
+
+  remove() {
+    if (this.shouldExist) {
+      throw new Error("Square Exists");
+    }
+
+    if (this.removed) {
+      return false;
+    } else {
+      this.tweener.tween(0, JubiSquare.SHRINK_VELOCITY);
+      this.removed = true;
+      return true;
+    }
+  }
+
+  // PRIVATE
+  _clearSquare() {
     this.pen.clearRect(
       this.leftEdge - (JubiSquare.GUTTER_SIZE / 2),
       this.topEdge - (JubiSquare.GUTTER_SIZE / 2),
@@ -37,8 +76,9 @@ class JubiSquare {
     );
   }
 
-  drawSquare(edgeSize) {
-    this.clearSquare();
+  _drawSquare(edgeSize) {
+    this._clearSquare();
+    if (edgeSize == 0) return;
 
     var indent = (JubiSquare.ROLLED_OFF_SIZE - edgeSize) / 2;
     this.pen.fillStyle = JubiSquare.SQUARE_COLOR;
@@ -48,13 +88,5 @@ class JubiSquare {
       edgeSize,
       edgeSize
     );
-  }
-
-  rolledOff() {
-    this.tweener.tween(JubiSquare.ROLLED_OFF_SIZE);
-  }
-
-  rolledOver() {
-    this.tweener.tween(JubiSquare.ROLLED_OVER_SIZE);
   }
 }

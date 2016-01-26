@@ -13,7 +13,7 @@ class JubiArrow {
     this.offset = offset;
   }
 
-  _clearArrow() {
+  _clearArrow() { // PRIVATE
     throw new TypeError("_clearArrow is a virtual function");
   }
   clearArrow() {
@@ -23,7 +23,7 @@ class JubiArrow {
     this.pos = false;
   }
 
-  _drawArrow() {
+  _drawArrow() { // PRIVATE
     throw new TypeError("_drawArrow is a virtual function");
   }
   drawArrow(pos) {
@@ -38,6 +38,7 @@ class JubiArrow {
 }
 
 class JubiColumnArrow extends JubiArrow {
+  // PRIVATE
   _clearArrow() {
     this.pen.clearRect(
       this.pos - JubiArrow.ARROW_WIDTH / 2 - 2,
@@ -63,6 +64,7 @@ class JubiColumnArrow extends JubiArrow {
 }
 
 class JubiRowArrow extends JubiArrow {
+  // PRIVATE
   _clearArrow() {
     this.pen.clearRect(
       this.offset - 2,

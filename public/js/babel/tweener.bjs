@@ -5,6 +5,25 @@ class Tweener {
     this.callback = callback;
   }
 
+  stopTweening() {
+    if (this.animationID) {
+      window.cancelAnimationFrame(this.animationID);
+      this.animationID = false;
+    }
+  }
+
+  tween(toValue, amountPerMS = false) {
+    if (amountPerMS) {
+      this.amountPerMS = amountPerMS;
+    }
+    this.stopTweening();
+
+    this.toValue = toValue;
+    this.currentMS = window.performance.now();
+    this.animationID = window.requestAnimationFrame(this._frame.bind(this));
+  }
+
+  // PRIVATE
   _frame(timeStamp) {
     var time_diff = timeStamp - this.currentMS;
     this.currentValue = (this.toValue > this.currentValue) ?
@@ -14,7 +33,7 @@ class Tweener {
       ) :
       Math.max(
         this.toValue,
-        this.currentValue - time_diff * this.amountPerMS 
+        this.currentValue - time_diff * this.amountPerMS
       );
 
     if (this.currentValue == this.toValue) {
@@ -25,20 +44,5 @@ class Tweener {
     }
 
     this.callback(this.currentValue);
-  }
-
-  stopTweening() {
-    if (this.animationID) {
-      window.cancelAnimationFrame(this.animationID);
-      this.animationID = false;
-    }
-  }
-
-  tween(toValue) {
-    this.stopTweening();
-
-    this.toValue = toValue;
-    this.currentMS = window.performance.now();
-    this.animationID = window.requestAnimationFrame(this._frame.bind(this));
   }
 }

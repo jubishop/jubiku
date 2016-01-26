@@ -101,14 +101,34 @@ class Jubiku {
   click(event) {
     var clicked_square = this.getSquareUnderMouse(event);
     if (clicked_square) {
-      console.log("clicked: " + clicked_square.column + ", " + clicked_square.row);
+      try {
+        var removed = clicked_square.remove();
+      }
+      catch (error) {
+        removed = false;
+        console.log("That square stays");
+      }
+
+      if (removed) {
+        console.log("Square removed!");
+      }
     }
   }
 
   rightClick(event) {
     var right_clicked_square = this.getSquareUnderMouse(event);
     if (right_clicked_square) {
-      console.log("right_clicked: " + right_clicked_square.column + ", " + right_clicked_square.row);   
+      try {
+        var kept = right_clicked_square.keep();
+      }
+      catch (error) {
+        kept = false;
+        console.log("That square should go");
+      }
+
+      if (kept) {
+        console.log("Square kept!");
+      }
     }
 
     event.preventDefault();
