@@ -1,11 +1,19 @@
 class JubiSquare {
+  static get SQUARE_COLOR() { return 'red'; }
+  static get CHECKMARK_COLOR() { return 'green'; }
+
   static get ROLLED_OFF_SIZE() { return 100; }
   static get ROLLED_OVER_SIZE() { return 80; }
-
-  static get SQUARE_COLOR() { return 'green'; }
-  static get ANIMATION_VELOCITY() { return 0.2; }
-  static get SHRINK_VELOCITY() { return 0.8; }
   static get GUTTER_SIZE() { return 10; }
+
+  static get ANIMATION_VELOCITY() { return 0.2; }
+  static get REMOVE_VELOCITY() { return 0.4; }
+  static get KEEP_VELOCITY() { return 0.4; }
+  static get CHECKMARK_VELOCITY() { return 0.2; }
+
+  static get CHECKMARK_LEFT() { return [60, 20]; }
+  static get CHECKMARK_DOWN() { return [70, 30]; }
+  static get CHECKMARK_RIGHT() { return [90, 10]; }
 
   constructor(pen, shouldExist, row, column) {
     this.pen = pen;
@@ -46,7 +54,11 @@ class JubiSquare {
     if (this.kept) {
       return false;
     } else {
-      this.tweener.tween(JubiSquare.ROLLED_OFF_SIZE);
+      this.tweener.speed = JubiSquare.KEEP_VELOCITY;
+      this.tweener.tween(
+        JubiSquare.ROLLED_OFF_SIZE, 
+        this._drawCheckmarkDown.bind(this)
+      );
       this.kept = true;
       return true;
     }
@@ -60,7 +72,8 @@ class JubiSquare {
     if (this.removed) {
       return false;
     } else {
-      this.tweener.tween(0, JubiSquare.SHRINK_VELOCITY);
+      this.tweener.speed = JubiSquare.REMOVE_VELOCITY;
+      this.tweener.tween(0);
       this.removed = true;
       return true;
     }
@@ -88,5 +101,32 @@ class JubiSquare {
       edgeSize,
       edgeSize
     );
+  }
+
+  _drawCheckmarkDown() {
+    var checkTween = new TweenArray(
+      JubiSquare.CHECKMARK_LEFT,
+      JubiSquare.CHECKMARK_VELOCITY,
+      this._downCheckmarkFrame.bind(this),
+      this._drawCheckMarkUp.bind(this)
+    );
+    checkTween.tween(JubiSquare.CHECKMARK_DOWN);
+  }
+
+  _downCheckmarkFrame(currentValue) {
+    console.log(currentValue);
+  }
+
+  _drawCheckMarkUp() {
+    var checkTween = new TweenArray(
+      JubiSquare.CHECKMARK_DOWN,
+      JubiSquare.CHECKMARK_VELOCITY,
+      this._upCheckmarkFrame.bind(this)
+    );
+    checkTween.tween(JubiSquare.CHECKMARK_RIGHT);
+  }
+
+  _upCheckmarkFrame(currentValue) {
+    console.log(currentValue);
   }
 }

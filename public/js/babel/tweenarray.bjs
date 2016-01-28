@@ -1,0 +1,56 @@
+class TweenArray extends Tweener {
+  constructor(startValue, amountPerMS, callback, finishCallback = false) {
+    if (startValue.constructor != Array) {
+      throw new TypeError('startValue must be an Array.');
+    }
+    super(startValue, amountPerMS, callback, finishCallback);
+  }
+
+  tween(toValue, finishCallback = false) {
+    if (toValue.constructor != Array ||
+      toValue.length != this.currentValue.length) {
+      throw new TypeError('toValue does not match startValue');
+    }
+
+    var valueSpread = this.currentValue.map((item, index) => {
+      return Math.abs(item - toValue[index])
+    });
+    var maxSpread = Math.max(...valueSpread);
+    this.speedRatios = valueSpread.map((item) => { return item / maxSpread; });
+
+    super.tween(toValue, finishCallback);
+  }
+
+  // PRIVATE
+  _frame(timeStamp) {
+    var time_diff = timeStamp - this.currentMS;
+
+    this.currentValue = this.toValue.map((toValue, index) => {
+      var currentValue = this.currentValue[index];
+      var speedRatio = this.speedRatios[index];
+      return (toValue > currentValue) ?
+        Math.min(
+          toValue,
+          time_diff * this.amountPerMS * speedRatio + currentValue
+        ) :
+        Math.max(
+          toValue,
+          currentValue - time_diff * this.amountPerMS * speedRatio
+        );
+    });
+
+    var finished = this.currentValue.toString() == this.toValue.toString();
+    if (finished) {
+      this.stopTweening();
+    } else {
+      this.currentMS = timeStamp;
+      this.animationID = window.requestAnimationFrame(this._frame.bind(this));
+    }
+
+    this.callback(this.currentValue);
+
+    if (this.finishCallback && finished) {
+      this.finishCallback();
+    }
+  }
+}

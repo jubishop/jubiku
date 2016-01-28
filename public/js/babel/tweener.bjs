@@ -1,8 +1,14 @@
+// TODO: Move this into a js/lib/ folder
 class Tweener {
-  constructor(startValue, amountPerMS, callback) {
+  constructor(startValue, amountPerMS, callback, finishCallback = false) {
     this.currentValue = startValue;
     this.amountPerMS = amountPerMS;
     this.callback = callback;
+    this.finishCallback = finishCallback;
+  }
+
+  set speed(amountPerMS) {
+    this.amountPerMS = amountPerMS;
   }
 
   stopTweening() {
@@ -12,10 +18,11 @@ class Tweener {
     }
   }
 
-  tween(toValue, amountPerMS = false) {
-    if (amountPerMS) {
-      this.amountPerMS = amountPerMS;
+  tween(toValue, finishCallback = false) {
+    if (finishCallback) {
+      this.finishCallback = finishCallback;
     }
+
     this.stopTweening();
 
     this.toValue = toValue;
@@ -44,5 +51,9 @@ class Tweener {
     }
 
     this.callback(this.currentValue);
+
+    if (this.finishCallback && this.currentValue == this.toValue) {
+      this.finishCallback();
+    }
   }
 }
