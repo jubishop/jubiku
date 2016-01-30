@@ -1,6 +1,8 @@
 class JubiSquare {
   static get SQUARE_COLOR() { return 'red'; }
   static get CHECKMARK_COLOR() { return 'green'; }
+  static get CHECKMARK_LINE_WIDTH() { return 4; }
+  static get CHECKMARK_LINE_CAP() { return 'round'; }
 
   static get ROLLED_OFF_SIZE() { return 100; }
   static get ROLLED_OVER_SIZE() { return 80; }
@@ -11,8 +13,8 @@ class JubiSquare {
   static get KEEP_VELOCITY() { return 0.4; }
   static get CHECKMARK_VELOCITY() { return 0.2; }
 
-  static get CHECKMARK_LEFT() { return [60, 20]; }
-  static get CHECKMARK_DOWN() { return [70, 30]; }
+  static get CHECKMARK_LEFT() { return [45, 30]; }
+  static get CHECKMARK_DOWN() { return [60, 50]; }
   static get CHECKMARK_RIGHT() { return [90, 10]; }
 
   constructor(pen, shouldExist, row, column) {
@@ -56,7 +58,7 @@ class JubiSquare {
     } else {
       this.tweener.speed = JubiSquare.KEEP_VELOCITY;
       this.tweener.tween(
-        JubiSquare.ROLLED_OFF_SIZE, 
+        JubiSquare.ROLLED_OFF_SIZE,
         this._drawCheckmarkDown.bind(this)
       );
       this.kept = true;
@@ -103,6 +105,17 @@ class JubiSquare {
     );
   }
 
+  _drawCheckmarkLine(from, to) {
+    this.pen.lineCap = JubiSquare.CHECKMARK_LINE_CAP;
+    this.pen.lineWidth = JubiSquare.CHECKMARK_LINE_WIDTH;
+    this.pen.strokeStyle = JubiSquare.CHECKMARK_COLOR;
+
+    this.pen.beginPath();
+    this.pen.moveTo(this.leftEdge + from[0], this.topEdge + from[1]);
+    this.pen.lineTo(this.leftEdge + to[0], this.topEdge + to[1]);
+    this.pen.stroke();
+  }
+
   _drawCheckmarkDown() {
     var checkTween = new TweenArray(
       JubiSquare.CHECKMARK_LEFT,
@@ -114,7 +127,7 @@ class JubiSquare {
   }
 
   _downCheckmarkFrame(currentValue) {
-    console.log(currentValue);
+    this._drawCheckmarkLine(JubiSquare.CHECKMARK_LEFT, currentValue);
   }
 
   _drawCheckMarkUp() {
@@ -127,6 +140,6 @@ class JubiSquare {
   }
 
   _upCheckmarkFrame(currentValue) {
-    console.log(currentValue);
+    this._drawCheckmarkLine(JubiSquare.CHECKMARK_DOWN, currentValue);
   }
 }
