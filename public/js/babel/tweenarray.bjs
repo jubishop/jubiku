@@ -1,9 +1,24 @@
-class TweenArray extends Tweener {
+class TweenArray {
   constructor(startValue, amountPerMS, callback, finishCallback = false) {
     if (startValue.constructor != Array) {
       throw new TypeError('startValue must be an Array.');
     }
-    super(startValue, amountPerMS, callback, finishCallback);
+
+    this.currentValue = startValue;
+    this.amountPerMS = amountPerMS;
+    this.callback = callback;
+    this.finishCallback = finishCallback;
+  }
+
+  set speed(amountPerMS) {
+    this.amountPerMS = amountPerMS;
+  }
+
+  stopTweening() {
+    if (this.animationID) {
+      window.cancelAnimationFrame(this.animationID);
+      this.animationID = false;
+    }
   }
 
   tween(toValue, finishCallback = false) {
@@ -12,16 +27,29 @@ class TweenArray extends Tweener {
       throw new TypeError('toValue does not match startValue');
     }
 
+    if (finishCallback) {
+      this.finishCallback = finishCallback;
+    }
+
+    this.stopTweening();
+
+    this.toValue = toValue;
+
     var valueSpread = this.currentValue.map((item, index) => {
       return Math.abs(item - toValue[index])
     });
     var maxSpread = Math.max(...valueSpread);
     this.speedRatios = valueSpread.map((item) => { return item / maxSpread; });
 
-    super.tween(toValue, finishCallback);
+    this.currentMS = window.performance.now();
+    this.animationID = window.requestAnimationFrame(this._frame.bind(this));
   }
 
   // PRIVATE
+  _informCallback(value) {
+    this.callback(value);
+  }
+
   _frame(timeStamp) {
     var time_diff = timeStamp - this.currentMS;
 
@@ -47,7 +75,7 @@ class TweenArray extends Tweener {
       this.animationID = window.requestAnimationFrame(this._frame.bind(this));
     }
 
-    this.callback(this.currentValue);
+    this._informCallback(this.currentValue);
 
     if (this.finishCallback && finished) {
       this.finishCallback();

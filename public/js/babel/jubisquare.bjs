@@ -4,6 +4,10 @@ class JubiSquare {
   static get CHECKMARK_LINE_WIDTH() { return 4; }
   static get CHECKMARK_LINE_CAP() { return 'round'; }
 
+  static get CHECKMARK_LEFT() { return [70, 20]; }
+  static get CHECKMARK_DOWN() { return [80, 30]; }
+  static get CHECKMARK_RIGHT() { return [90, 10]; }
+
   static get ROLLED_OFF_SIZE() { return 100; }
   static get ROLLED_OVER_SIZE() { return 80; }
   static get GUTTER_SIZE() { return 10; }
@@ -12,10 +16,6 @@ class JubiSquare {
   static get REMOVE_VELOCITY() { return 0.4; }
   static get KEEP_VELOCITY() { return 0.4; }
   static get CHECKMARK_VELOCITY() { return 0.2; }
-
-  static get CHECKMARK_LEFT() { return [45, 30]; }
-  static get CHECKMARK_DOWN() { return [60, 50]; }
-  static get CHECKMARK_RIGHT() { return [90, 10]; }
 
   constructor(pen, shouldExist, row, column) {
     this.pen = pen;
@@ -30,7 +30,7 @@ class JubiSquare {
     this.shouldExist = Boolean(shouldExist);
     this.kept = this.removed = false;
 
-    this.tweener = new Tweener(
+    this.tweener = new TweenNumber(
       JubiSquare.ROLLED_OFF_SIZE,
       JubiSquare.ANIMATION_VELOCITY,
       this._drawSquare.bind(this)

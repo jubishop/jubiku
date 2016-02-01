@@ -1,0 +1,23 @@
+// TODO: Move this into a js/lib/ folder
+class TweenNumber extends TweenArray {
+  constructor(startValue, amountPerMS, callback, finishCallback = false) {
+    if (startValue.constructor != Number) {
+      throw new TypeError('startValue must be a Number.');
+    }
+
+    super([startValue], amountPerMS, callback, finishCallback);
+  }
+
+  tween(toValue, finishCallback = false) {
+    if (toValue.constructor != Number) {
+      throw new TypeError('toValue must be an Number.');
+    }
+
+    super.tween([toValue], finishCallback);
+  }
+
+  // PRIVATE
+  _informCallback(value) {
+    this.callback(value[0]);
+  }
+}
