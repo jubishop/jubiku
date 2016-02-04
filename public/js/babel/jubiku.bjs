@@ -45,6 +45,10 @@ class Jubiku {
       });
     });
 
+    this.internalNumberHints = internalNumbers.map((internalNumber) => {
+      return new JubiNumberHint(this.pen, internalNumber, this.jubiSquares);
+    });
+
     // Listen to the mouse
     this.canvas.addEventListener('mouseenter', this.mouseMove.bind(this));
     this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this));

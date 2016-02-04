@@ -2,6 +2,7 @@ class JubiHint {
   static get HINT_HEIGHT() { return 50; }
   static get HINT_WIDTH() { return 50; }
 
+  static get FONT_COLOR() { return 'black'; }
   static get FONT_SIZE() { return 30; }
   static get HINT_SPACING() { return 10; }
 
@@ -21,9 +22,6 @@ class JubiHint {
     }
 
     this.pos = pos;
-
-    this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
-
     this.drawUnsolved();
   }
 
@@ -35,6 +33,8 @@ class JubiHint {
 class JubiRowHint extends JubiHint {
   drawUnsolved() {
     if (this.hints) {
+      this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
+      this.pen.fillStyle = JubiHint.FONT_COLOR;
       this.pen.textBaseline = 'middle';
       this.pen.textAlign = 'right';
 
@@ -55,6 +55,8 @@ class JubiRowHint extends JubiHint {
 class JubiColumnHint extends JubiHint {
   drawUnsolved() {
     if (this.hints) {
+      this.pen.font = JubiHint.FONT_SIZE + 'px Arial';
+      this.pen.fillStyle = JubiHint.FONT_COLOR;
       this.pen.textBaseline = 'bottom';
       this.pen.textAlign = 'center';
 

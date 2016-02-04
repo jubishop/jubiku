@@ -1,0 +1,21 @@
+class JubiNumberHint {
+  static get FONT_COLOR() { return 'black'; }
+  static get FONT_SIZE() { return 60; }
+
+  constructor(pen, numberInfo, jubiSquares) {
+    this.pen = pen;
+    this.info = numberInfo;
+    this.square = jubiSquares[this.info.position[0]][this.info.position[1]];
+
+    this.pen.font = JubiNumberHint.FONT_SIZE + 'px Arial';
+    this.pen.fillStyle = JubiNumberHint.FONT_COLOR;
+    this.pen.textBaseline = 'middle';
+    this.pen.textAlign = 'center';
+
+    this.pen.fillText(
+      this.info.number,
+      this.square.leftEdge + JubiSquare.ROLLED_OFF_SIZE / 2,
+      this.square.topEdge + JubiSquare.ROLLED_OFF_SIZE / 2
+    );
+  }
+}
