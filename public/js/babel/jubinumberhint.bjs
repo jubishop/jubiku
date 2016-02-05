@@ -7,6 +7,11 @@ class JubiNumberHint {
     this.info = numberInfo;
     this.square = jubiSquares[this.info.position[0]][this.info.position[1]];
 
+    this.drawNumber();
+    this.square.addEventListener('SquareDrawn', this.drawNumber.bind(this))
+  }
+
+  drawNumber(event = false) {
     this.pen.font = JubiNumberHint.FONT_SIZE + 'px Arial';
     this.pen.fillStyle = JubiNumberHint.FONT_COLOR;
     this.pen.textBaseline = 'middle';

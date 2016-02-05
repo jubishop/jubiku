@@ -1,4 +1,4 @@
-class JubiSquare {
+class JubiSquare extends EventDispatcher {
   static get SQUARE_COLOR() { return 'red'; }
   static get CHECKMARK_COLOR() { return 'green'; }
   static get CHECKMARK_LINE_WIDTH() { return 4; }
@@ -18,8 +18,8 @@ class JubiSquare {
   static get CHECKMARK_VELOCITY() { return 0.2; }
 
   constructor(pen, shouldExist, row, column) {
+    super();
     this.pen = pen;
-
     this.row = row;
     this.column = column;
 
@@ -50,7 +50,7 @@ class JubiSquare {
 
   keep() {
     if (!this.shouldExist) {
-      throw new Error("Square Should Go");
+      throw new Error('Square Should Go');
     }
 
     if (this.kept) {
@@ -68,7 +68,7 @@ class JubiSquare {
 
   remove() {
     if (this.shouldExist) {
-      throw new Error("Square Exists");
+      throw new Error('Square Exists');
     }
 
     if (this.removed) {
@@ -103,6 +103,8 @@ class JubiSquare {
       edgeSize,
       edgeSize
     );
+
+    this.dispatchEvent(new Event('SquareDrawn'));
   }
 
   _drawCheckmarkLine(from, to) {

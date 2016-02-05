@@ -1,0 +1,17 @@
+class EventDispatcher {
+  constructor() {
+    this.eventListeners = new Array();
+  }
+
+  addEventListener(type, eventHandler) {
+    this.eventListeners.push({type: type, eventHandler: eventHandler});
+  }
+
+  dispatchEvent(event) {
+    this.eventListeners.forEach((listener) => {
+      if (event.type == listener.type) {
+        listener.eventHandler(event);
+      }
+    });
+  }
+}

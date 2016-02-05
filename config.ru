@@ -16,7 +16,9 @@ use JubikuRouter,
       'js/jubisquare', 'js/jubiarrow', 'js/jubihint', 'js/jubinumberhint'
     ],
     'js/jubinumberhint' => ['js/jubisquare'],
-    'js/jubisquare' => ['js/tweennumber', 'js/tweenarray'],
+    'js/jubisquare' => [
+      'js/tweennumber', 'js/tweenarray', 'js/eventdispatcher'
+    ],
     'js/tweennumber' => ['js/tweenarray']
   }
 run Jubi404
