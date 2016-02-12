@@ -12,24 +12,7 @@ class Jubiku {
     JubiSquare.topOffset = JubiHint.HINT_HEIGHT + Jubiku.HINT_MARGIN +
       JubiArrow.ARROW_HEIGHT + Jubiku.ARROW_MARGIN;
 
-    // Create game objects (hints, arrows, squares)
-    var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE;
-    var half_square = JubiSquare.ROLLED_OFF_SIZE / 2;
-    this.rowHints = rowHints.map((rowHint, row) => {
-      return new JubiRowHint(
-        this.pen,
-        rowHint,
-        JubiSquare.topOffset + spacing * row + half_square
-      );
-    });
-    this.columnHints = columnHints.map((columnHint, column) => {
-      return new JubiColumnHint(
-        this.pen,
-        columnHint,
-        JubiSquare.leftOffset + spacing * column + half_square
-      );
-    });
-
+    // Create arrows
     this.jubiColumnArrow = new JubiColumnArrow(
       this.pen,
       JubiHint.HINT_HEIGHT + Jubiku.HINT_MARGIN
@@ -39,12 +22,32 @@ class Jubiku {
       JubiHint.HINT_WIDTH + Jubiku.HINT_MARGIN
     );
 
+    // Create squares
     this.jubiSquares = squares.map((rowElement, row) => {
       return rowElement.map((columnValue, column) => {
         return new JubiSquare(this.pen, columnValue, row, column);
       });
     });
 
+    // Create hints
+    var spacing = JubiSquare.ROLLED_OFF_SIZE + JubiSquare.GUTTER_SIZE;
+    var half_square = JubiSquare.ROLLED_OFF_SIZE / 2;
+    this.rowHints = rowHints.map((rowHint, row) => {
+      return new JubiRowHint(
+        this.pen,
+        rowHint,
+        JubiSquare.topOffset + spacing * row + half_square,
+        this.jubiSquares[row]
+      );
+    });
+    this.columnHints = columnHints.map((columnHint, column) => {
+      return new JubiColumnHint(
+        this.pen,
+        columnHint,
+        JubiSquare.leftOffset + spacing * column + half_square,
+        this.jubiSquares.map((squareRow) => { return squareRow[column] })
+      );
+    });
     this.internalNumberHints = internalNumbers.map((internalNumber) => {
       return new JubiNumberHint(this.pen, internalNumber, this.jubiSquares);
     });

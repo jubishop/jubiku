@@ -62,6 +62,7 @@ class JubiSquare extends EventDispatcher {
         this._drawCheckmarkDown.bind(this)
       );
       this.kept = true;
+      this.dispatchEvent(new Event('SquareKept'));
       return true;
     }
   }
@@ -77,6 +78,7 @@ class JubiSquare extends EventDispatcher {
       this.tweener.speed = JubiSquare.REMOVE_VELOCITY;
       this.tweener.tween(0);
       this.removed = true;
+      this.dispatchEvent(new Event('SquareRemoved'));
       return true;
     }
   }

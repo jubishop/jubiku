@@ -6,9 +6,9 @@ class JubiHint {
   static get FONT_SIZE() { return 30; }
   static get HINT_SPACING() { return 10; }
 
-  constructor(pen, hint, pos) {
+  constructor(pen, hint, pos, squareLine) {
     if (this.constructor == JubiHint) {
-      throw new TypeError("JubiArrow is an abstract class");
+      throw new TypeError('JubiArrow is an abstract class');
     }
 
     this.pen = pen;
@@ -22,11 +22,13 @@ class JubiHint {
     }
 
     this.pos = pos;
+    this.squareLine = squareLine;
+
     this.drawUnsolved();
   }
 
   drawUnsolved() {
-    throw new TypeError("drawUnsolved is a virtual function");
+    throw new TypeError('drawUnsolved is a virtual function');
   }
 }
 
@@ -71,5 +73,5 @@ class JubiColumnHint extends JubiHint {
         yPos -= JubiHint.FONT_SIZE + JubiHint.HINT_SPACING;
       }
     }
-  }  
+  }
 }
